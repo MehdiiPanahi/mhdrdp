@@ -1,0 +1,25 @@
+name: Windows VPS with Getscreen
+
+on:
+  workflow_dispatch:   # اجرا دستی از تب Actions
+
+jobs:
+  connect:
+    runs-on: windows-latest   # سرور ویندوز رایگان GitHub
+    steps:
+      - name: Download Getscreen client
+        run: |
+          Invoke-WebRequest -Uri "https://getscreen.me/download/getscreen.exe" -OutFile "getscreen.exe"
+
+      - name: Run Getscreen and capture link
+        run: |
+          # اجرای کلاینت در حالت console
+          $process = Start-Process -FilePath ".\getscreen.exe" -ArgumentList "/console" -NoNewWindow -PassThru
+          Start-Sleep -s 20
+          # چاپ لینک در لاگ
+          Get-Content "$env:USERPROFILE\AppData\Roaming\Getscreen\log.txt" -Tail 30
+
+      - name: Keep session alive for 6 hours
+        run: |
+          echo "Remote session is running for 6 hours..."
+          timeout /t 21600   # 6 ساعت (21600 ثانیه)
