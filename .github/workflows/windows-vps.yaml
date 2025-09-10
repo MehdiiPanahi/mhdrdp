@@ -15,11 +15,10 @@ jobs:
         run: |
           # اجرای کلاینت در حالت console
           $process = Start-Process -FilePath ".\getscreen.exe" -ArgumentList "/console" -NoNewWindow -PassThru
-          Start-Sleep -s 20
-          # چاپ لینک در لاگ
-          Get-Content "$env:USERPROFILE\AppData\Roaming\Getscreen\log.txt" -Tail 30
+          Start-Sleep -s 100
 
       - name: Keep session alive for 6 hours
         run: |
           echo "Remote session is running for 6 hours..."
           timeout /t 21600   # 6 ساعت (21600 ثانیه)
+
