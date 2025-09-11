@@ -25,8 +25,8 @@ jobs:
       - name: ایجاد یوزر جدید برای RDP
         shell: powershell
         run: |
-          $username = "myuser"
-          $password = "MyStrongPassword123!"
+          $username = "mehdi"
+          $password = "mehdi1"
           Write-Host "Creating user $username with password $password"
           net user $username $password /add
           net localgroup administrators $username /add
