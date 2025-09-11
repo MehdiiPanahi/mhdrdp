@@ -16,10 +16,6 @@ jobs:
           curl -L -o tailscale.msi https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi
           msiexec /i tailscale.msi /qn
 
-      - name: تست مسیر tailscale.exe
-        run: |
-          Get-ChildItem "C:\Program Files" -Recurse -Filter tailscale.exe | ForEach-Object { $_.FullName }
-
       - name: ورود به Tailscale
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
