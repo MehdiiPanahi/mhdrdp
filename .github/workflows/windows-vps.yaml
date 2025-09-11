@@ -11,20 +11,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: نصب Tailscale با Winget
+      - name: دانلود و نصب Tailscale
         run: |
-          winget install --id=Tailscale.Tailscale -e --accept-source-agreements --accept-package-agreements
+          curl -L -o tailscale.msi https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi
+          msiexec /i tailscale.msi /qn
 
       - name: ورود به Tailscale
         run: |
-          tailscale up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
+          "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
       - name: نمایش IP و وضعیت
         run: |
-          tailscale ip -4
-          tailscale status
+          "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" ip -4
+          "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" status
 
       - name: نگه داشتن سشن برای 6 ساعت
         run: |
