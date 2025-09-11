@@ -1,4 +1,4 @@
-name: Tailscale Windows VPS (6h)
+name: Tailscale Windows VPS (6h session)
 
 on:
   workflow_dispatch:
@@ -11,10 +11,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: نصب Tailscale
+      - name: نصب Tailscale با Winget
         run: |
-          curl -fsSL https://tailscale.com/install.ps1 -o install.ps1
-          powershell -ExecutionPolicy Bypass -File install.ps1
+          winget install --id=Tailscale.Tailscale -e --accept-source-agreements --accept-package-agreements
 
       - name: ورود به Tailscale
         run: |
@@ -22,7 +21,7 @@ jobs:
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
-      - name: نمایش IP
+      - name: نمایش IP و وضعیت
         run: |
           tailscale ip -4
           tailscale status
