@@ -1,4 +1,4 @@
-name: Tailscale Windows VPS (6h session)
+name: Tailscale Windows VPS (6h session + user)
 
 on:
   workflow_dispatch:
@@ -22,7 +22,17 @@ jobs:
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
-      - name: نمایش IP و وضعیت
+      - name: ایجاد یوزر جدید برای RDP
+        shell: powershell
+        run: |
+          $username = "myuser"
+          $password = "MyStrongPassword123!"
+          Write-Host "Creating user $username with password $password"
+          net user $username $password /add
+          net localgroup administrators $username /add
+
+      - name: نمایش IP و وضعیت Tailscale
+        shell: powershell
         run: |
           & "C:\Program Files\Tailscale\tailscale.exe" ip -4
           & "C:\Program Files\Tailscale\tailscale.exe" status
