@@ -16,16 +16,20 @@ jobs:
           curl -L -o tailscale.msi https://pkgs.tailscale.com/stable/tailscale-setup-latest-amd64.msi
           msiexec /i tailscale.msi /qn
 
+      - name: تست مسیر tailscale.exe
+        run: |
+          Get-ChildItem "C:\Program Files" -Recurse -Filter tailscale.exe | ForEach-Object { $_.FullName }
+
       - name: ورود به Tailscale
         run: |
-          & "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
+          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
       - name: نمایش IP و وضعیت
         run: |
-          & "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" ip -4
-          & "C:\Program Files (x86)\Tailscale IPN\tailscale.exe" status
+          & "C:\Program Files\Tailscale\tailscale.exe" ip -4
+          & "C:\Program Files\Tailscale\tailscale.exe" status
 
       - name: نگه داشتن سشن برای 6 ساعت
         run: |
