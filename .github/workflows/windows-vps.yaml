@@ -28,6 +28,7 @@ jobs:
           & "C:\Program Files\Tailscale\tailscale.exe" status
 
       - name: نگه داشتن سشن برای 6 ساعت
+        shell: powershell
         run: |
-          echo "Keeping session alive for 6 hours..."
-          timeout /t 21600
+          Write-Host "Keeping session alive for 6 hours..."
+          Start-Sleep -Seconds 21600
