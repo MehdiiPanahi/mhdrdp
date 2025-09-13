@@ -1,0 +1,41 @@
+name: Tailscale Linux VPS (6h session + user)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  connect:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: نصب Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: ورود به Tailscale
+        run: |
+          sudo tailscale up --authkey $TS_AUTHKEY --hostname github-vps --accept-dns=false
+        env:
+          TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
+
+      - name: ساخت یوزر برای SSH
+        run: |
+          USERNAME="Admin"
+          PASSWORD="q1erPJM"
+          sudo useradd -m -s /bin/bash $USERNAME
+          echo "$USERNAME:$PASSWORD" | sudo chpasswd
+          sudo usermod -aG sudo $USERNAME
+          echo "User $USERNAME created with password $PASSWORD"
+
+      - name: نمایش IP و وضعیت Tailscale
+        run: |
+          tailscale ip -4
+          tailscale status
+
+      - name: نگه داشتن سشن برای 6 ساعت
+        run: |
+          echo "Keeping session alive for 6 hours..."
+          sleep 21600
