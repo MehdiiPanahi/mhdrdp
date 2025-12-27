@@ -17,8 +17,12 @@ jobs:
           msiexec /i tailscale.msi /qn
 
       - name: ورود به Tailscale
+        shell: powershell
         run: |
-          & "C:\Program Files\Tailscale\tailscale.exe" up --authkey $env:TS_AUTHKEY --hostname github-vps --accept-dns=false
+          & "C:\Program Files\Tailscale\tailscale.exe" up `
+            --authkey $env:TS_AUTHKEY `
+            --hostname github-vps `
+            --accept-dns=true
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
@@ -26,10 +30,14 @@ jobs:
         shell: powershell
         run: |
           $username = "Admin"
-          $password = "a5dHOye35"
-          Write-Host "Creating user $username with password $password"
+          $password = $env:WIN_PASSWORD
+
           net user $username $password /add
           net localgroup administrators $username /add
+
+          Write-Host "User $username created"
+        env:
+          WIN_PASSWORD: ${{ secrets.WIN_PASSWORD }}
 
       - name: نمایش IP و وضعیت Tailscale
         shell: powershell
