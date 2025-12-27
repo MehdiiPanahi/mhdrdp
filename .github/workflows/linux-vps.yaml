@@ -17,18 +17,25 @@ jobs:
 
       - name: ورود به Tailscale
         run: |
-          sudo tailscale up --authkey $TS_AUTHKEY --hostname github-vps --accept-dns=true
+          sudo tailscale up \
+            --authkey $TS_AUTHKEY \
+            --hostname github-vps \
+            --accept-dns=true
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
       - name: ساخت یوزر برای SSH
         run: |
           USERNAME="Admin"
-          PASSWORD="q1erPJM"
-          sudo useradd -m -s /bin/bash $USERNAME
+          PASSWORD="$SSH_PASSWORD"
+
+          sudo useradd -m -s /bin/bash "$USERNAME"
           echo "$USERNAME:$PASSWORD" | sudo chpasswd
-          sudo usermod -aG sudo $USERNAME
-          echo "User $USERNAME created with password $PASSWORD"
+          sudo usermod -aG sudo "$USERNAME"
+
+          echo "User $USERNAME created"
+        env:
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
 
       - name: نمایش IP و وضعیت Tailscale
         run: |
