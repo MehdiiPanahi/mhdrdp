@@ -17,7 +17,7 @@ jobs:
 
       - name: ورود به Tailscale
         run: |
-          sudo tailscale up --authkey $TS_AUTHKEY --hostname github-vps --accept-dns=false
+          sudo tailscale up --authkey $TS_AUTHKEY --hostname github-vps --accept-dns=true
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
